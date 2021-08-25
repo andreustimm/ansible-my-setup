@@ -4,11 +4,6 @@
   connection: local
   become: true
   tasks:
-    - name: Atualizando Pacotes
-      apt:
-        upgrade: full
-        update_cache: yes
-
     - name: Adicionando Chave Google Chrome
       apt_key:
         url: "https://dl-ssl.google.com/linux/linux_signing_key.pub"
@@ -21,7 +16,12 @@
         filename: google
         update_cache: no
 
-    - name: Instalando Softwares
+    - name: Atualizando Pacotes
+      apt:
+        upgrade: full
+        update_cache: yes
+
+    - name: Instalando Softwares via APT
       apt:
         name: '{{ item }}'
         install_recommends: yes
@@ -32,6 +32,8 @@
           - htop
           - unzip
           - curl
+          - bc
+          - wine
           - wget
           - tree
           - apt-transport-https
@@ -53,15 +55,37 @@
           - rfkill
           - google-chrome-stable
           - notion
+          - snapd
 
-    - name: Instalando Microsoft Teams
-      apt:
-        deb: https://teams.microsoft.com/downloads/desktopurl?env=production&plat=linux&arch=x64&download=true&linuxArchiveType=deb
-        autoclean: yes
-        autoremove: yes
-
-    - name: Instalando Zoom
-      apt:
-        deb: https://zoom.us/client/latest/zoom_amd64.deb
-        autoclean: yes
-        autoremove: yes
+    - name: Instalando Softwares via Snap
+      snap:
+        name: '{{ item }}'
+        classic: yes
+      loop:
+        - core
+        - snap-store 
+        - phpstorm
+        - code
+        - mysql-workbench-community
+        - robo3t-snap
+        - postman
+        - insomnia
+        - gitkraken
+        - remmina
+        - evernote-web-client
+        - onlyoffice-desktopeditors
+        - brave
+        - opera
+        - slack
+        - telegram-desktop
+        - discord
+        - teams-insiders
+        - zoom-client
+        - obs-studio
+        - audacity
+        - youtube-dl
+        - vlc
+        - spotify
+        - google-play-music-desktop-player
+        - plexmediaserver
+        - sc-controller
