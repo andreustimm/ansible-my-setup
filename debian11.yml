@@ -1,0 +1,67 @@
+---
+- name: Preparando ambiente
+  hosts: localhost
+  connection: local
+  become: true
+  tasks:
+    - name: Atualizando Pacotes
+      apt:
+        upgrade: full
+        update_cache: yes
+
+    - name: Adicionando Chave Google Chrome
+      apt_key:
+        url: "https://dl-ssl.google.com/linux/linux_signing_key.pub"
+        keyring: /etc/apt/trusted.gpg.d/google_chrome.gpg
+
+    - name: Adicionando Repositório Google Chrome
+      ansible.builtin.apt_repository:
+        repo: "deb https://dl.google.com/linux/chrome/deb/ stable main"
+        state: present
+        filename: google
+        update_cache: no
+
+    - name: Instalando Softwares
+      apt:
+        name: '{{ item }}'
+        install_recommends: yes
+        state: present
+        update_cache: yes
+      loop:
+          - vim
+          - htop
+          - unzip
+          - curl
+          - wget
+          - tree
+          - apt-transport-https
+          - ca-certificates
+          - gnupg
+          - python3-pip
+          - make
+          - git
+          - bash-completion
+          - gnupg-agent
+          - terminator
+          - flameshot
+          - fonts-hack
+          - mlocate
+          - krita
+          - bluetooth
+          - bluez
+          - bluez-tools
+          - rfkill
+          - google-chrome-stable
+          - notion
+
+    - name: Instalando Microsoft Teams
+      apt:
+        deb: https://teams.microsoft.com/downloads/desktopurl?env=production&plat=linux&arch=x64&download=true&linuxArchiveType=deb
+        autoclean: yes
+        autoremove: yes
+
+    - name: Instalando Zoom
+      apt:
+        deb: https://zoom.us/client/latest/zoom_amd64.deb
+        autoclean: yes
+        autoremove: yes
