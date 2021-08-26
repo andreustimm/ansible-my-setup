@@ -68,6 +68,19 @@
           - krita
           - ansible
           - snapd
+          - gnome
+          - ssh
+          - xrdp
+
+    - name: Habilitando SSH na Inicialização
+      service:
+        name: ssh
+        enabled: yes
+
+    - name: Habilitando XRDP na Inicialização
+      service:
+        name: xrdp
+        enabled: yes
 
     - name: Instalando Softwares via Snap
       snap:
@@ -75,7 +88,7 @@
         classic: yes
       loop:
         - core
-        - snap-store 
+        - snap-store
         - phpstorm
         - code
         - mysql-workbench-community
