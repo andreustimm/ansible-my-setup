@@ -71,6 +71,8 @@
           - gnome
           - ssh
           - xrdp
+          - ufw
+          - fail2ban
 
     - name: Habilitando SSH na Inicialização
       service:
@@ -81,6 +83,21 @@
       service:
         name: xrdp
         enabled: yes
+
+    - name: Habilitando UFW na Inicialização
+      service:
+        name: ufw
+        enabled: yes
+
+    - name: Liberar Acesso portas no Firewall
+      community.general.ufw:
+        rule: allow
+        port: '{{ item }}'
+        src: 192.168.0.0/24
+        proto: tcp
+      loop:
+          - '22'
+          - '3389'
 
     - name: Instalando Softwares via Snap
       snap:
