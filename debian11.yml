@@ -96,6 +96,14 @@
         group: andreus
         mode: '0755'
 
+    - name: Configurando ambiente gráfico padrão para todos os usuários
+      ansible.builtin.copy:
+        src: xrdp/.xsession
+        dest: /etc/skel/.xsession
+        owner: root
+        group: root
+        mode: '0644'
+
     - name: Habilitando ambiente gráfico para todos usuários
       ansible.builtin.replace:
         path: /etc/X11/Xwrapper.config
