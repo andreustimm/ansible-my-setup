@@ -26,6 +26,9 @@
 #      ansible.builtin.apt_repository:
 #        repo: ppa:nathan-renniewaldock/flux 
 
+#    - name: Configurando ambiente gráfico no usuário
+#      ansible.builtin.shell: echo xfce4-session > /home/andreus/.xsession
+
     - name: Atualizando Pacotes
       apt:
         upgrade: full
@@ -67,12 +70,48 @@
           - filezilla
           - krita
           - ansible
+          - ansible-lint
           - snapd
           - gnome
+          - gnome-tweak-tool
+          - task-gnome-desktop
+          - xfce4
+          - xfce4-terminal
+          - xorg
+          - xserver-xorg-core
+          - xserver-xorg-input-all
+          - dbus-x11
+          - x11-xserver-utils
+          - ssl-cert 
           - ssh
           - xrdp
           - ufw
           - fail2ban
+
+    - name: Configurando ambiente gráfico no usuário
+      ansible.builtin.copy:
+        src: xrdp/.xsession
+        dest: /home/andreus/.xsession
+        owner: andreus
+        group: andreus
+        mode: '0755'
+
+    - name: Habilitando ambiente gráfico para todos usuários
+      ansible.builtin.replace:
+        path: /etc/X11/Xwrapper.config
+        regexp: 'allowed_users=console'
+        replace: 'allowed_users=anybody'
+
+    - name: Adicionando usuário 'xrdp' ao grupo 'ssl-cert'
+      user:
+        name: 'xrdp'
+        groups: 'ssl-cert'
+
+    - name: Adicionando usuário 'andreus' ao grupo 'sudo'
+      user:
+        name: 'andreus'
+        groups: sudo
+        append: yes
 
     - name: Habilitando SSH na Inicialização
       service:
